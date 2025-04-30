@@ -1,0 +1,19 @@
+# .dockerignore
+
+# Ignora o repositório .git
+.git
+
+# Ignora caches de Python
+__pycache__
+*.pyc
+
+# Ignora arquivos .env (credenciais)
+.env
+
+# Se usar .env.example, pode ou não manter aqui
+.env.example
+
+# Se tiver pastas de build que não queira incluir
+*.egg-info
+build
+dist
