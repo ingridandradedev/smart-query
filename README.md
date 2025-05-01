@@ -20,11 +20,16 @@ The ReAct agent follows a structured process:
 
 ## Setup
 
-### User interface
+### User Interface
 
-1. Login
+1. **Login**
 
-Watch the demo video showcasing the Smart Query user interface and features: [Smart Query Demo Video](https://offgridmartech.com.br/ai-microsoft-hackathon/smart_query_demo.mp4)
+Watch the demo video showcasing the Smart Query user interface and features:
+
+<video width="640" height="360" controls>
+  <source src="https://offgridmartech.com.br/ai-microsoft-hackathon/smart_query_demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ### Prerequisites
 - Python 3.9 or higher
