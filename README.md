@@ -20,6 +20,12 @@ The ReAct agent follows a structured process:
 
 ## Setup
 
+### User interface
+
+1. Login
+
+Watch the demo video showcasing the Smart Query user interface and features: [Smart Query Demo Video](https://offgridmartech.com.br/ai-microsoft-hackathon/smart_query_demo.mp4)
+
 ### Prerequisites
 - Python 3.9 or higher
 - PostgreSQL database (for database tools)
