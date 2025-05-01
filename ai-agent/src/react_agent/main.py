@@ -29,7 +29,7 @@ app = FastAPI(
 )
 
 origins = [
-    "https://app.agentmark.pro",
+    "https://smartquery.offgridmartech.com.br",
     # Adicione outras origens conforme necessário
 ]
 

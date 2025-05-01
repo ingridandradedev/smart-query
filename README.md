@@ -1,5 +1,7 @@
 # Smart Query - ReAct Agent for Marketing Data Analysis
 
+![Smart Query Data](https://offgridmartech.com.br/ai-microsoft-hackathon/smart_query_data.png)
+
 Smart Query is a custom Reasoning and Action (ReAct) agent built using LangGraph. This agent assists with marketing data analysis by leveraging tools for querying databases, analyzing knowledge bases, and providing actionable insights. The project is highly extensible and adaptable to various use cases.
 
 ## Features
