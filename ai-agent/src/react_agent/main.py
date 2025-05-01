@@ -152,6 +152,12 @@ async def invoke_agent_last(request: AgentRequest) -> AgentSingleResponse:
             "database_schema": request.database_schema,
             "index_host": request.index_host,
             "namespace": request.namespace,
+            # Passando os parâmetros de conexão ao PostgreSQL para a configuração
+            "postgres_host": request.postgres_host,
+            "postgres_port": request.postgres_port,
+            "postgres_dbname": request.postgres_dbname,
+            "postgres_user": request.postgres_user,
+            "postgres_password": request.postgres_password,
         }
     }
     input_state = InputState(
@@ -191,6 +197,12 @@ async def stream_agent(request: AgentRequest) -> StreamingResponse:
             "database_schema": request.database_schema,
             "index_host": request.index_host,
             "namespace": request.namespace,
+            # Passando os parâmetros de conexão ao PostgreSQL para a configuração
+            "postgres_host": request.postgres_host,
+            "postgres_port": request.postgres_port,
+            "postgres_dbname": request.postgres_dbname,
+            "postgres_user": request.postgres_user,
+            "postgres_password": request.postgres_password,
         }
     }
     input_state = InputState(
