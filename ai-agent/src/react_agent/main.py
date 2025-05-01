@@ -1,6 +1,6 @@
 # main.py -> langgraph-app/src/react_agent/main.py
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -57,6 +57,12 @@ class AgentRequest(BaseModel):
     database_schema: Optional[str] = None
     index_host: Optional[str] = None
     namespace: Optional[str] = None
+    # Adicionando parâmetros de conexão ao PostgreSQL
+    postgres_host: Optional[str] = None
+    postgres_port: Optional[int] = None
+    postgres_dbname: Optional[str] = None
+    postgres_user: Optional[str] = None
+    postgres_password: Optional[str] = None
 
 class AgentResponse(BaseModel):
     thread_id: str
@@ -103,6 +109,12 @@ async def invoke_agent(request: AgentRequest) -> AgentResponse:
             "database_schema": request.database_schema,
             "index_host": request.index_host,
             "namespace": request.namespace,
+            # Passando os parâmetros de conexão ao PostgreSQL para a configuração
+            "postgres_host": request.postgres_host,
+            "postgres_port": request.postgres_port,
+            "postgres_dbname": request.postgres_dbname,
+            "postgres_user": request.postgres_user,
+            "postgres_password": request.postgres_password,
         }
     }
     input_state = InputState(

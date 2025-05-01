@@ -10,17 +10,6 @@ from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import InjectedToolArg
 from react_agent.configuration import Configuration
 
-# =============================================================================
-# Configuração do PostgreSQL (exceto schema, que agora virá da config)
-# =============================================================================
-
-# Remova as credenciais fixas
-# POSTGRES_HOST = "aws-0-sa-east-1.pooler.supabase.com"
-# POSTGRES_PORT = 6543
-# POSTGRES_DBNAME = "postgres"
-# POSTGRES_USER = "postgres.vjhqaxnridfwycamgexo"
-# POSTGRES_PASSWORD = "XIAVUxyAvTH2nXEp"
-
 # Substitua por chamadas às variáveis de ambiente
 POSTGRES_HOST = os.getenv("POSTGRES_HOST")
 POSTGRES_PORT = int(os.getenv("POSTGRES_PORT", 5432))  # Valor padrão: 5432
@@ -32,16 +21,16 @@ POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 # LISTAR TABELAS (LIST TABLES)
 # =============================================================================
 
-def _list_tables(schema: str) -> Dict[str, Any]:
+def _list_tables(schema: str, config: Dict[str, Any]) -> Dict[str, Any]:
     """
     Lista as tabelas do schema informado do banco de dados PostgreSQL.
     """
     connection = psycopg2.connect(
-        host=POSTGRES_HOST,
-        port=POSTGRES_PORT,
-        dbname=POSTGRES_DBNAME,
-        user=POSTGRES_USER,
-        password=POSTGRES_PASSWORD
+        host=config["postgres_host"],
+        port=config["postgres_port"],
+        dbname=config["postgres_dbname"],
+        user=config["postgres_user"],
+        password=config["postgres_password"]
     )
     try:
         with connection.cursor(cursor_factory=RealDictCursor) as cursor:
@@ -53,7 +42,7 @@ def _list_tables(schema: str) -> Dict[str, Any]:
         connection.close()
 
 async def list_tables_tool(
-    * ,
+    *,
     config: Annotated[RunnableConfig, InjectedToolArg]
 ) -> Dict[str, Any]:
     """
@@ -63,7 +52,7 @@ async def list_tables_tool(
     if not configuration.database_schema:
         raise ValueError("Configuration 'database_schema' is required but was not provided.")
     db_schema = configuration.database_schema
-    return _list_tables(db_schema)
+    return _list_tables(db_schema, config=config)
 
 # =============================================================================
 # OBTÉM COLUNAS DE UMA OU MAIS TABELAS
