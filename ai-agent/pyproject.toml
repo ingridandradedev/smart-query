@@ -1,5 +1,5 @@
 [project]
-name = "Smart Query"
+name = "smart-query"  # Nome corrigido para seguir o padrão PEP 508
 version = "0.0.1"
 description = "AI agent designed for intelligent analysis of both unstructured and structured data, providing contextual insights."
 authors = [
