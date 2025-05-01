@@ -2,7 +2,7 @@ from typing import Any, Dict, List
 from pydantic import BaseModel, Field
 import openai
 from openai import OpenAI  # nova forma de instanciar o client
-from pinecone.grpc import PineconeGRPC as Pinecone
+import pinecone
 from typing_extensions import Annotated
 import os
 

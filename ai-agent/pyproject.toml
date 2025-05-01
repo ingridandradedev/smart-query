@@ -1,9 +1,9 @@
 [project]
-name = "react-agent"
+name = "Smart Query"
 version = "0.0.1"
-description = "Starter template for making a custom Reasoning and Action agent (using tool calling) in LangGraph."
+description = "AI agent designed for intelligent analysis of both unstructured and structured data, providing contextual insights."
 authors = [
-    { name = "William Fu-Hinthorn", email = "13333726+hinthornw@users.noreply.github.com" },
+    { name = "Ingrid Andrade", email = "ingridandrade@offgridmartech.com.br" },
 ]
 readme = "README.md"
 license = { text = "MIT" }
@@ -21,7 +21,7 @@ dependencies = [
     "fastapi>=0.95.0",
     "uvicorn>=0.22.0",
     "psycopg2-binary>=2.9.6",
-    "pinecone-client[grpc]>=0.2.6",
+    "pinecone>=2.0.0",
     "openai>=1.0.0"
 ]
 
