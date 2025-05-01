@@ -38,6 +38,14 @@ SmartQuery follows the **Reasoning + Acting (ReAct)** paradigm:
 
 ---
 
+## 🎥 Veja a Demo
+
+Check out how SmartQuery works in practice! Click the image below to watch the demo video:
+
+[![SmartQuery Demo](https://offgridmartech.com.br/ai-microsoft-hackathon/demo_image.png)](https://offgridmartech.com.br/ai-microsoft-hackathon/smart_query_demo.mp4)
+
+---
+
 ## 🚀 Use Cases
 - Marketing teams exploring campaign performance metrics
 - BI teams asking analytical questions without writing SQL
