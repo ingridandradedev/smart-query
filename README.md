@@ -1,134 +1,182 @@
-# Smart Query - ReAct Agent for Marketing Data Analysis
+### Project Name
+
+SmartQuery | Your AI Agent for Contextual Data Analysis
 
 ![Smart Query Data](https://offgridmartech.com.br/ai-microsoft-hackathon/smart_query_data.png)
 
-Smart Query is a custom Reasoning and Action (ReAct) agent built using LangGraph. This agent assists with marketing data analysis by leveraging tools for querying databases, analyzing knowledge bases, and providing actionable insights. The project is highly extensible and adaptable to various use cases.
 
-## Features
-- **ReAct Agent**: Implements a reasoning and action loop to process user queries and execute actions iteratively.
-- **Database Integration**: Tools for listing tables, retrieving table columns, and executing read-only SQL queries on PostgreSQL databases.
-- **Knowledge Base Search**: Integration with Pinecone and OpenAI for querying knowledge bases using embeddings.
-- **Customizable Prompts**: Configurable system prompts to define the agent's behavior and context.
-- **Tool Integration**: Includes tools for web search, database operations, and knowledge base queries.
-- **FastAPI Interface**: Provides an API for interacting with the agent, supporting both synchronous and streaming responses.
+### Description
 
-## How It Works
-The ReAct agent follows a structured process:
-1. **User Query**: The user provides a query or request.
-2. **Reasoning**: The agent reasons about the query and decides on an action.
-3. **Action Execution**: The agent executes the chosen action using integrated tools.
-4. **Observation**: The agent observes the result of the action.
-5. **Iteration**: Steps 2-4 are repeated until the agent can provide a final response.
+# SmartQuery | Reasoning-Driven AI Agent for SQL and Knowledge Retrieval
 
-## Setup
+SmartQuery is an AI-powered agentic application designed to act not just as a translator of natural language into SQL, but as a true reasoning-driven data analyst. Unlike conventional AI agents that simply convert prompts into database queries, SmartQuery delivers inteligência com contexto: it reasons through user questions, decides what data sources to access, and dynamically combines structured (SQL) and unstructured (documents, PDFs, notes, strategy files) information to generate rich, contextual insights. This context-aware, multi-source reasoning makes it ideal for scenarios where knowledge lives not only in databases, but also in the documentation that surrounds them.
 
-### User Interface
+---
 
-1. **Login**
+## 🔍 Overview
 
-Watch the demo video showcasing the Smart Query user interface and features:
+At its core, SmartQuery leverages:
+- **Azure AI Agent Service** and OpenAI LLMs for natural language understanding
+- **Reasoning workflows (ReAct)** for multi-step decision-making
+- **RAG (Retrieval-Augmented Generation)** to enrich responses with document-based context
+- **LangGraph** for agent orchestration and iterative thinking
 
-<video width="640" height="360" controls>
-  <source src="https://offgridmartech.com.br/ai-microsoft-hackathon/smart_query_demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+It dynamically determines whether to:
+- Run live SQL queries on user-provided PostgreSQL databases
+- Retrieve semantic knowledge from user-uploaded documents (e.g., strategy files, PDFs, CSVs)
+- Combine both sources into a unified, human-readable answer
+
+---
+
+## 🧠 What Makes it Agentic?
+SmartQuery follows the **Reasoning + Acting (ReAct)** paradigm:
+
+1. The agent reasons over the user’s question.
+2. It determines the best action (SQL query, document lookup, or hybrid).
+3. Executes the action, observes results.
+4. Iterates until it produces a coherent, contextual response.
+
+---
+
+## 🚀 Use Cases
+- Marketing teams exploring campaign performance metrics
+- BI teams asking analytical questions without writing SQL
+- Operations teams querying live databases and internal docs in one place
+
+---
+
+## 📊 Key Features
+- ✅ Natural language chat interface powered by an AI agent
+- 🔄 Multi-turn conversations with context retention
+- 📁 Upload and manage documents (PDF, TXT, DOCX, CSV)
+- 🧠 RAG pipeline with vector search (Pinecone or Supabase Vector)
+- 👨‍💼 Multi-tenant: each user sees only their data, docs, and chats
+- ⚡ Built with Python, Azure AI, Docker, FastAPI, PostgreSQL, LangGraph, Supabase
+
+---
+
+## ⚖️ API Endpoints
+
+### `POST /invoke_last`
+Processes user messages and returns the final agent response.
+
+### `POST /stream`
+Optional endpoint for real-time, streaming responses.
+
+### `POST /load-data`
+Uploads and indexes documents to the vector database.
+
+### `GET /query-data`
+Queries vectorized documents to retrieve context for the agent.
+
+---
+
+## 🛠️ Technologies Used
+- **Language & Framework**: Python + FastAPI
+- **AI Layer**: Azure AI Agent Service (OpenAI-based LLMs)
+- **Agent Runtime**: LangGraph (ReAct architecture)
+- **Database**: PostgreSQL
+- **Auth/Storage**: Supabase
+- **Vector Search**: Pinecone (pluggable)
+
+---
+
+## 🌐 Features in Development
+- ⏰ Cron jobs for scheduled reports
+- 📢 Proactive messages and alerts from the agent
+
+---
+
+## ♻️ Setup & Installation
 
 ### Prerequisites
-- Python 3.9 or higher
-- PostgreSQL database (for database tools)
-- API keys for Tavily, OpenAI, and Pinecone (if using related tools)
+- Python 3.9+
+- PostgreSQL instance for SQL queries
+- Supabase account for auth and file storage
+- API keys: OpenAI, Pinecone, Tavily (optional)
 
 ### Installation
-1. Clone the repository:
-  ```bash
-  git clone https://github.com/your-repo/smart-query.git
-  cd smart-query
-  ```
-2. Install dependencies:
-  ```bash
-  pip install -r requirements.txt
-  ```
-3. Create a `.env` file based on `.env.example` and add your API keys.
-4. Run the application.
 
-## API Endpoints
-
-### `/invoke`
-- **Method**: POST  
-- **Description**: Processes a user query and returns the agent's response.  
-- **Request Body**:
-  ```json
-  {
-   "messages": [
-    {"role": "user", "content": "What are the top-performing campaigns?"}
-   ],
-   "user_id": "123",
-   "user_name": "John Doe",
-   "database_schema": "marketing"
-  }
-  ```
-- **Response**:
-  ```json
-  {
-   "thread_id": "abc123",
-   "user_id": "123",
-   "user_name": "John Doe",
-   "messages": [
-    {"role": "assistant", "content": "The top-performing campaigns are..."}
-   ]
-  }
-  ```
-
-### `/invoke_last`
-- **Method**: POST  
-- **Description**: Returns only the last message from the agent's response.
-
-### `/stream`
-- **Method**: POST  
-- **Description**: Streams the agent's response in real-time.
-
-## Customization
-
-### Add New Tools
-Extend the agent's capabilities by adding new tools in `tools.py`. For example, you can add tools for additional database operations or external API integrations.
-
-### Modify the Prompt
-The system prompt is defined in `prompts.py`. Customize it to change the agent's behavior and context.
-
-### Change the Model
-The default model is `anthropic/claude-3-5-sonnet-20240620`. Switch to other models by updating the `model` field in `configuration.py`.
-
-## Development
-
-### Run Tests
-To run unit tests:
 ```bash
-make test
-```
+# Clone the repository
+git clone https://github.com/your-repo/smartquery.git
+cd smartquery
 
-### Lint and Format Code
-To lint and format the code:
-```bash
-make lint
-make format
+# Install dependencies
+pip install -r requirements.txt
+
+# Create .env file based on template
+cp .env.example .env
+# Add your credentials and API keys
+
+# Run the app
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 ### Docker Support
-Build and run the application using Docker:
 ```bash
 docker build -t smart-query .
 docker run -p 8000:8000 smart-query
 ```
 
-## Folder Structure
-- **`react_agent`**: Core logic for the ReAct agent, including tools, configuration, and state management.
-- **`.langgraph_api`**: Checkpoints and data for LangGraph.
-- **`tests`**: Unit tests for the application.
+---
 
-## License
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+## 📊 How It Works
 
-## Contributing
-Contributions are welcome! Feel free to open issues or submit pull requests.
+1. **Connect to your database through the UI**  
+   Easily select and connect your SQL data source in the interface.
 
-For more details, refer to the LangGraph documentation.
+   ![Conexões com Banco de Dados](https://offgridmartech.com.br/ai-microsoft-hackathon/database_conections.png)
+
+2. **Upload unstructured sources for contextual retrieval**  
+   Enrich the agent’s reasoning with supporting documents like PDFs, notes, and strategy files.
+
+   ![Upload de Documentos](https://offgridmartech.com.br/ai-microsoft-hackathon/smart_query_upload_doc.png)
+
+3. **Submit a natural language question via the UI**  
+   Users can ask anything about the data — the agent understands your intent and gets to work.
+
+   ![Chat com o Agente](https://offgridmartech.com.br/ai-microsoft-hackathon/chat_with_database.png)
+
+4. AI Agent routes the task using reasoning and actions
+The agent determines the best course of action, whether it's executing SQL queries, retrieving information from vectorized documents or both.
+
+5. **Data retrieval and reasoning**  
+   The agent executes the appropriate actions: it runs SQL queries or accesses unstructured sources, then analyzes and refines the result.
+
+6. **Response generation**  
+   The final answer is returned directly in the chat interface, with full context.
+
+---
+
+For more details, see the [[SmartQuery Documentation](https://offgridmartech.com.br/smart-query-documentation)].
+
+### Language & Framework
+
+- [x] Python
+- [ ] C#
+- [ ] Java
+- [x] JavaScript/TypeScript
+- [ ] Microsoft Copilot Studio
+- [ ] Microsoft 365 Agents SDK
+- [x] Azure AI Agent Service
+
+### Project Repository URL
+
+https://github.com/ingridandradedev/smart-query.git
+
+### Deployed Endpoint URL
+
+https://smartquery.offgridmartech.com.br/
+
+### Project Video
+
+https://offgridmartech.com.br/ai-microsoft-hackathon/smart_query_demo.mp4
+
+### Team Members
+
+ingridandradedev
+
+### Registration Check
+
+- [x] Each of my team members has filled out the registration form
