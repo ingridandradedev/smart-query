@@ -21,16 +21,16 @@ POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 # LISTAR TABELAS (LIST TABLES)
 # =============================================================================
 
-def _list_tables(schema: str, config: Dict[str, Any]) -> Dict[str, Any]:
+def _list_tables(schema: str, config: Configuration) -> Dict[str, Any]:
     """
     Lista as tabelas do schema informado do banco de dados PostgreSQL.
     """
     connection = psycopg2.connect(
-        host=config["postgres_host"],
-        port=config["postgres_port"],
-        dbname=config["postgres_dbname"],
-        user=config["postgres_user"],
-        password=config["postgres_password"]
+        host=config.postgres_host,
+        port=config.postgres_port,
+        dbname=config.postgres_dbname,
+        user=config.postgres_user,
+        password=config.postgres_password
     )
     try:
         with connection.cursor(cursor_factory=RealDictCursor) as cursor:
@@ -52,7 +52,7 @@ async def list_tables_tool(
     if not configuration.database_schema:
         raise ValueError("Configuration 'database_schema' is required but was not provided.")
     db_schema = configuration.database_schema
-    return _list_tables(db_schema, config=config)
+    return _list_tables(db_schema, config=configuration)
 
 # =============================================================================
 # OBTÉM COLUNAS DE UMA OU MAIS TABELAS
@@ -69,18 +69,18 @@ class GetTableColumnsParams(BaseModel):
             return [v]
         return v
 
-def _get_columns_for_tables(params: GetTableColumnsParams, schema: str) -> Dict[str, Any]:
+def _get_columns_for_tables(params: GetTableColumnsParams, schema: str, config: Configuration) -> Dict[str, Any]:
     """
     Obtém as colunas para cada tabela da lista fornecida, utilizando o schema informado.
     Retorna um dicionário onde cada chave é o nome da tabela e o valor é uma lista de colunas.
     """
     result: Dict[str, Any] = {}
     connection = psycopg2.connect(
-        host=POSTGRES_HOST,
-        port=POSTGRES_PORT,
-        dbname=POSTGRES_DBNAME,
-        user=POSTGRES_USER,
-        password=POSTGRES_PASSWORD
+        host=config.postgres_host,
+        port=config.postgres_port,
+        dbname=config.postgres_dbname,
+        user=config.postgres_user,
+        password=config.postgres_password
     )
     try:
         with connection.cursor(cursor_factory=RealDictCursor) as cursor:
@@ -111,7 +111,7 @@ async def get_table_columns_tool(
         raise ValueError("Configuration 'database_schema' is required but was not provided.")
     db_schema = configuration.database_schema
     params = GetTableColumnsParams(table_names=table_names)
-    return _get_columns_for_tables(params, db_schema)
+    return _get_columns_for_tables(params, db_schema, config=configuration)
 
 # =============================================================================
 # EXECUTA QUERY SQL (READ-ONLY)
@@ -137,17 +137,17 @@ def validate_query(query: str) -> None:
         if re.search(pattern, query, re.IGNORECASE):
             raise ValueError(f"Queries contendo '{keyword}' não são permitidas.")
 
-def _execute_sql_query(params: ExecuteSQLQueryParams, schema: str) -> Dict[str, Any]:
+def _execute_sql_query(params: ExecuteSQLQueryParams, schema: str, config: Configuration) -> Dict[str, Any]:
     """
     Executa uma query SQL read-only no banco de dados PostgreSQL utilizando o schema informado.
     """
     validate_query(params.query)
     connection = psycopg2.connect(
-        host=POSTGRES_HOST,
-        port=POSTGRES_PORT,
-        dbname=POSTGRES_DBNAME,
-        user=POSTGRES_USER,
-        password=POSTGRES_PASSWORD
+        host=config.postgres_host,
+        port=config.postgres_port,
+        dbname=config.postgres_dbname,
+        user=config.postgres_user,
+        password=config.postgres_password
     )
     try:
         with connection.cursor(cursor_factory=RealDictCursor) as cursor:
@@ -175,4 +175,4 @@ async def execute_sql_query_tool(
         raise ValueError("Configuration 'database_schema' is required but was not provided.")
     db_schema = configuration.database_schema
     params = ExecuteSQLQueryParams(query=query)
-    return _execute_sql_query(params, db_schema)
+    return _execute_sql_query(params, db_schema, config=configuration)

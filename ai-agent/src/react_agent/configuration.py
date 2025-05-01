@@ -75,6 +75,38 @@ class Configuration:
         },
     )
 
+    # Campos para conexão com o PostgreSQL
+    postgres_host: Optional[str] = field(
+        default=None,
+        metadata={
+            "description": "Host do banco de dados PostgreSQL."
+        },
+    )
+    postgres_port: Optional[int] = field(
+        default=5432,
+        metadata={
+            "description": "Porta do banco de dados PostgreSQL."
+        },
+    )
+    postgres_dbname: Optional[str] = field(
+        default=None,
+        metadata={
+            "description": "Nome do banco de dados PostgreSQL."
+        },
+    )
+    postgres_user: Optional[str] = field(
+        default=None,
+        metadata={
+            "description": "Usuário do banco de dados PostgreSQL."
+        },
+    )
+    postgres_password: Optional[str] = field(
+        default=None,
+        metadata={
+            "description": "Senha do banco de dados PostgreSQL."
+        },
+    )
+
     @classmethod
     def from_runnable_config(
         cls, config: Optional[RunnableConfig] = None
