@@ -94,6 +94,86 @@ Queries vectorized documents to retrieve context for the agent.
 - 📢 Proactive messages and alerts from the agent
 
 ---
+##  Agentic Architecture
+
+```mermaid
+flowchart TD
+ subgraph Initialization["Initialization"]
+        B["Input Validation"]
+        C["RunnableConfig Initialization"]
+        D["State Initialization"]
+  end
+ subgraph Tools["Tools"]
+        H["SQL Tools"]
+        I["Knowledge Base Tools"]
+        J["Search Tools"]
+  end
+ subgraph subGraph2["SQL Tools"]
+        H1["Validate SQL Query"]
+        H2["Execute SQL Query"]
+        H3["Return SQL Results"]
+  end
+ subgraph subGraph3["Knowledge Base Tools"]
+        I1["Generate Embedding"]
+        I2["Query Pinecone Index"]
+        I3["Return Knowledge Base Results"]
+  end
+ subgraph subGraph4["Search Tools"]
+        J1["Perform Web Search"]
+        J2["Return Search Results"]
+  end
+    A["User Request"] -- FastAPI Routes --> B
+    B -- AgentRequest Model --> C
+    C -- "Configuration Class - Parameters" --> D
+    D -- StateGraph Builder --> E["Call Model Node"]
+    E -- System Prompt + Context --> F["Validate Query"]
+    F -- "SQL Query Validation - Read-Only Check" --> G["Route to Tools"]
+    G -- SQL Query Detected --> H
+    G -- Knowledge Base Query Detected --> I
+    G -- Search Query Detected --> J
+    H --> H1
+    H1 -- "Check for Forbidden Keywords - e.g., INSERT, DELETE" --> H2
+    H2 -- Run Query on PostgreSQL --> H3
+    I --> I1
+    I1 -- OpenAI Embedding Model --> I2
+    I2 -- Retrieve Relevant Documents --> I3
+    J --> J1
+    J1 -- Tavily Search Engine --> J2
+    H3 --> K["Combine Results"]
+    I3 --> K
+    J2 --> K
+    K -- Generate Final Response --> L["Response to User"]
+```
+---
+## 🧩 Data Model Overview
+
+![Data Model](https://offgridmartech.com.br/ai-microsoft-hackathon/database_modelation.png)
+
+This multi-tenant data model powers an AI-driven analytics platform where each user's data—such as connections, conversations, and documents—is securely isolated and linked to their `auth.users.id`.
+
+### Key Tables Overview
+
+#### `database_connections`
+- Stores connection info for external SQL databases.
+- Includes credentials and cached schema data.
+
+#### `knowledge_sources`
+- Manages unstructured files (e.g., planning docs, market reports).
+- Includes metadata and indexing for Retrieval-Augmented Generation (RAG).
+
+#### `conversations`
+- Registers user-agent sessions.
+- Tracks titles, thread IDs, and timestamps to preserve interaction context.
+
+#### `messages`
+- Logs individual chat messages.
+- Includes roles and timestamps to enable complete conversational history.
+
+#### `profiles`
+- Extends user data with optional profile fields like name.
+- Useful for personalization.
+
+---
 
 ## ♻️ Setup & Installation
 
