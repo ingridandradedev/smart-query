@@ -5,7 +5,7 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Copia apenas os arquivos necessários para o container
-COPY ./rag-pipeline /app
+COPY . /app
 
 # Instala as dependências do projeto
 RUN pip install --no-cache-dir -r requirements.txt
