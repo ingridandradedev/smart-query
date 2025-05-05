@@ -3,12 +3,21 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
+# Instala dependências do sistema necessárias para OpenCV/PDF processing
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    poppler-utils \  # Necessário para manipulação de PDFs
+    tesseract-ocr \  # Necessário para OCR
+    && rm -rf /var/lib/apt/lists/*
+
 # Copia dependências e instala
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt ./
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
 # Copia o código da aplicação
-COPY main.py .
+COPY main.py ./
 
 # Porta do FastAPI/uvicorn
 EXPOSE 8000
