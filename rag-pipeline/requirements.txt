@@ -1,8 +1,8 @@
 fastapi
-uvicorn
+uvicorn[standard]
 python-dotenv
-pinecone-client
 
+pinecone-client
 langchain
 langchain-community
 langchain-openai
