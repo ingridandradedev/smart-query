@@ -5,11 +5,13 @@ FROM python:3.10-slim
 # 2) Defina o diretório de trabalho
 WORKDIR /app
 
-# Instala dependências do sistema (inclui libGL e libgthread)
+# Instala dependências do sistema (inclui libGL, libgthread, poppler e tesseract)
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       libgl1-mesa-glx \
       libglib2.0-0 \
+      poppler-utils \
+      tesseract-ocr \
  && rm -rf /var/lib/apt/lists/*
 
 # 1) Instala dependências Python
