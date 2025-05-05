@@ -9,8 +9,8 @@ from langchain_openai import AzureOpenAIEmbeddings  # we'll still use this but w
 from langchain.schema import Document
 
 import pinecone
-from pinecone.grpc import PineconeGRPC as Pinecone
-from pinecone import ServerlessSpec   # only needed for create_index spec if you really want serverless
+from pinecone import Pinecone, ServerlessSpec
+from langchain_pinecone import PineconeVectorStore  # Certifique-se de importar o VectorStore
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -34,18 +34,18 @@ def carregar_variaveis_ambiente() -> Dict[str, str]:
 
 def inicializar_pinecone(
     api_key: str,
-    environment: str,
+    region: str,
     index_name: str = "smart-query",
     dimension: int = 1536
 ):
     """Inicializa o cliente Pinecone e cria o índice se necessário."""
-    logger.info("Inicializando cliente Pinecone via PineconeGRPC")
+    logger.info("Inicializando cliente Pinecone")
     pc = Pinecone(api_key=api_key)
 
     # Verifica se o índice já existe
-    if index_name not in pc.list_indexes().names():
+    if not pc.has_index(name=index_name):
         logger.info(f"Criando índice Pinecone: {index_name}")
-        spec = ServerlessSpec(cloud="aws", region=environment)
+        spec = ServerlessSpec(cloud="aws", region=region)
         pc.create_index(
             name=index_name,
             dimension=dimension,
@@ -54,7 +54,7 @@ def inicializar_pinecone(
         )
     else:
         logger.info(f"Usando índice Pinecone existente: {index_name}")
-    
+
     # Conecta ao índice
     return pc.Index(index_name)
 
@@ -121,7 +121,7 @@ def main():
         config = carregar_variaveis_ambiente()
         index = inicializar_pinecone(
             api_key=config["pinecone_api_key"],
-            environment=config["pinecone_env"],
+            region=config["pinecone_env"],
         )
         pdf_url = (
             "https://faqdrjkeazvchresmldb.supabase.co/storage/v1/"
