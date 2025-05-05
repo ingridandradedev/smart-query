@@ -17,7 +17,11 @@ RUN apt-get update \
 # 1) Instala dependências Python
 COPY requirements.txt ./
 RUN pip install --upgrade pip \
- && pip install --no-cache-dir -r requirements.txt
+ && pip install --no-cache-dir -r requirements.txt \
+ && pip install unstructured-pytesseract
+
+# define o OCR_AGENT para usar o pytesseract
+ENV OCR_AGENT=unstructured_pytesseract
 
 # 2) Copia o código da API
 COPY rag_pipeline/ ./rag_pipeline/
