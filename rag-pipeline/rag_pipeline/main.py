@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from rag_pipeline.api.endpoints import router
+from rag_pipeline.api import router
 
 app = FastAPI(
     title="Smart Query RAG API",

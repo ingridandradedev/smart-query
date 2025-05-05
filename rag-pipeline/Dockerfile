@@ -5,15 +5,16 @@ FROM python:3.10-slim
 # 2) Defina o diretório de trabalho
 WORKDIR /app
 
-# 3) Copie o arquivo de dependências
+# 1) Instala dependências
 COPY requirements.txt ./
+RUN pip install --upgrade pip \
+ && pip install --no-cache-dir -r requirements.txt
 
-# 4) Atualize pip e instale as dependências
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+# 2) Copia o package Python
+COPY rag_pipeline/ ./rag_pipeline/
 
-# 5) Copie todo o conteúdo do projeto para o container
-COPY . .
+# (opcional) copia .env se precisar em staging
+COPY .env* ./
 
 # 6) Adicione o diretório ao PYTHONPATH
 ENV PYTHONPATH=/app
@@ -22,4 +23,4 @@ ENV PYTHONPATH=/app
 EXPOSE 8000
 
 # 8) Defina o comando que inicia a aplicação
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "rag_pipeline.main:app", "--host", "0.0.0.0", "--port", "8000"]
