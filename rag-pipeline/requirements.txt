@@ -7,3 +7,7 @@ langchain
 langchain-community
 langchain-openai
 langchain-pinecone
+
+unstructured
+pdfminer.six
+pi-heif
