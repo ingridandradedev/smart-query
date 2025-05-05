@@ -5,6 +5,12 @@ FROM python:3.10-slim
 # 2) Defina o diretório de trabalho
 WORKDIR /app
 
+# Instala dependências do sistema (inclui libGL)
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      libgl1-mesa-glx \
+ && rm -rf /var/lib/apt/lists/*
+
 # 1) Instala dependências
 COPY requirements.txt ./
 RUN pip install --upgrade pip \
