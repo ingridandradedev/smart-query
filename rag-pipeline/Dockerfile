@@ -1,11 +1,14 @@
-# Use uma imagem base leve do Python
+# filepath: c:\Users\Dell\Desktop\smart-query\rag-pipeline\Dockerfile
 FROM python:3.10-slim
 
 # Define o diretório de trabalho dentro do container
-WORKDIR /app
+WORKDIR /rag-pipeline
 
-# Copia apenas os arquivos necessários para o container
-COPY . /app
+# Copia todos os arquivos do projeto para o container
+COPY . /rag-pipeline
+
+# Define a variável de ambiente PYTHONPATH
+ENV PYTHONPATH=/rag-pipeline
 
 # Instala as dependências do projeto
 RUN pip install --no-cache-dir -r requirements.txt
