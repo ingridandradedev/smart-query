@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from rag_pipeline.api import router
-from rag_pipeline.pinecone import inicializar_pinecone
+from rag_pipeline.rag import inicializar_pinecone  # Corrigida a importação
 from rag_pipeline.config import config
 
 app = FastAPI(
