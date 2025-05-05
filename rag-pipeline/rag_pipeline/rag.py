@@ -9,6 +9,7 @@ from langchain_openai import AzureOpenAIEmbeddings  # we'll still use this but w
 from langchain.schema import Document
 
 import pinecone
+from pinecone.grpc import PineconeGRPC as Pinecone
 from pinecone import ServerlessSpec   # only needed for create_index spec if you really want serverless
 
 # Configurar logging
@@ -38,21 +39,24 @@ def inicializar_pinecone(
     dimension: int = 1536
 ):
     """Inicializa o cliente Pinecone e cria o índice se necessário."""
-    logger.info("Inicializando cliente Pinecone via pinecone.init()")
-    pinecone.init(api_key=api_key, environment=environment)
-    existing = pinecone.list_indexes()
-    if index_name not in existing:
+    logger.info("Inicializando cliente Pinecone via PineconeGRPC")
+    pc = Pinecone(api_key=api_key)
+
+    # Verifica se o índice já existe
+    if index_name not in pc.list_indexes().names():
         logger.info(f"Criando índice Pinecone: {index_name}")
-        pinecone.create_index(
+        spec = ServerlessSpec(cloud="aws", region=environment)
+        pc.create_index(
             name=index_name,
             dimension=dimension,
             metric="cosine",
-            # especifique spec se usar serverless:
-            spec=ServerlessSpec(cloud="aws", region="us-east-1"),
+            spec=spec,
         )
     else:
         logger.info(f"Usando índice Pinecone existente: {index_name}")
-    return pinecone.Index(index_name)
+    
+    # Conecta ao índice
+    return pc.Index(index_name)
 
 def carregar_e_dividir_documento(
     url: str,
