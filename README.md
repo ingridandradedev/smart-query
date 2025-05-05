@@ -145,6 +145,24 @@ flowchart TD
     K -- Generate Final Response --> L["Response to User"]
 ```
 ---
+## RAG Pipeline Flow
+
+```mermaid
+flowchart TD
+    A["POST /run-rag/"] --> B["Execute RAG pipeline"]
+    D["Initialize Pinecone and select/create index"] --> E["Load and split PDF into chunks"]
+    E --> F["Initialize Azure OpenAI Embeddings"]
+    F --> G["Create Pinecone Vector Store"]
+    G --> H["Process chunks in batches"]
+    H --> I["Add texts and metadata to vector store"]
+    I --> J{"More batches to process?"}
+    J -- Yes --> H
+    J -- No --> K["Return index name, namespace, and chunks count"]
+    K --> L["200 OK"]
+    B --> D
+```
+
+---
 ## 🧩 Data Model Overview
 
 ![Data Model](https://offgridmartech.com.br/ai-microsoft-hackathon/database_modelation.png)
