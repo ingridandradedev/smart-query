@@ -7,8 +7,8 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     libglib2.0-0 \
-    poppler-utils \  # Necessário para manipulação de PDFs
-    tesseract-ocr \  # Necessário para OCR
+    poppler-utils \
+    tesseract-ocr \
     && rm -rf /var/lib/apt/lists/*
 
 # Copia dependências e instala
