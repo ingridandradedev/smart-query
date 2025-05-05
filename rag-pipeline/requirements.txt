@@ -11,3 +11,4 @@ langchain-pinecone
 unstructured
 pdfminer.six
 pi-heif
+unstructured-inference
