@@ -1,20 +1,25 @@
 # filepath: c:\Users\Dell\Desktop\smart-query\rag-pipeline\Dockerfile
+# 1) Imagem base com Python 3.10 slim
 FROM python:3.10-slim
 
-# Define o diretório de trabalho dentro do container
-WORKDIR /rag-pipeline
+# 2) Defina o diretório de trabalho
+WORKDIR /app
 
-# Copia todos os arquivos do projeto para o container
-COPY . /rag-pipeline
+# 3) Copie o arquivo de dependências
+COPY requirements.txt ./
 
-# Define a variável de ambiente PYTHONPATH
-ENV PYTHONPATH=/rag-pipeline
-
-# Instala as dependências do projeto
+# 4) Atualize pip e instale as dependências
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expõe a porta padrão do FastAPI
+# 5) Copie todo o conteúdo do projeto para o container
+COPY . .
+
+# 6) Adicione o diretório ao PYTHONPATH
+ENV PYTHONPATH=/app
+
+# 7) Exponha a porta 8000 (onde o FastAPI roda)
 EXPOSE 8000
 
-# Comando para iniciar o servidor FastAPI
+# 8) Defina o comando que inicia a aplicação
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
